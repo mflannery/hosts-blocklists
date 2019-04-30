@@ -1,0 +1,24 @@
+---
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: Download bad hosts
+      get_url:
+        url: https://raw.githubusercontent.com/notracking/hosts-blocklists/master/hostnames.txt
+        dest: /etc/hostnames.txt
+        mode: 0644 
+        owner: dnsmasq
+        group: dnsmasq
+    - name: Download bad domains
+      get_url:
+        url: https://raw.githubusercontent.com/notracking/hosts-blocklists/master/domains.txt
+        dest: /etc/domains.txt
+        mode: 0644 
+        owner: dnsmasq
+        group: dnsmasq
+    - name: Restart dnsmasq
+      systemd:
+        name: dnsmasq
+        state: restarted
+        daemon_reload: yes
